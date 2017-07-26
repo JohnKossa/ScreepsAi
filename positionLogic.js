@@ -14,6 +14,7 @@ function spiralPositions(x, y, count){
 		if(positions.length >= count){
 			break;
 		}
+		currentDirection = (currentDirection + 1) % 4;
 		currPair = addCoords(currPair, directions[currentDirection]);
 		positions.push(currPair);
 		currentDirection = (currentDirection + 1) % 4;

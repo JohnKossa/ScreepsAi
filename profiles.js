@@ -2,6 +2,9 @@ var my = require("./my");
 var jobs = require("./jobs");
 var creepsAvailableForProfile = require("./creepUtils").creepsAvailableForProfile;
 var creepMatchesProfile = require("./creepUtils").creepMatchesProfile;
+var creepsInProfile = require("./creepUtils").creepsInProfile;
+var spiralPositions = require("./positionLogic").spiralPositions;
+var canBuildAt = require("./positionLogic").canBuildAt;
 var profiles = {
 	creeps: {
 		miner:{
@@ -73,8 +76,10 @@ var profiles = {
 
 				var constructionTarget = spawn.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 				if(constructionTarget) {
-					var haveBuilder = creepsInProfile(my.creeps(), profiles["builder"]).length > 0;
-					if(!haveBuilder && creepsInProfile(my.creeps(), profiles["miner"]).length > 1){
+					let allBuilders = creepsInProfile(my.creeps(), profiles.creeps.builder);
+					let allMiners = creepsInProfile(my.creeps(), profiles.creeps.miner);
+					var haveBuilder = allBuilders.length > 0;
+					if(!haveBuilder && allMiners.length > 1){
 						//Unbuilt buildings but no builders, convert a worker to a builder
 						console.log(spawn.name+" says: I need to convert a builder.");
 						var viableBuilders = creepsAvailableForProfile(my.creeps(), profiles.creeps.builder);
@@ -88,17 +93,35 @@ var profiles = {
 				if(Game.gcl >= 4 && spawn.room.storage == undefined){
 					//We can get a storage container, but we don't have one yet
 					console.log(spawn.name+" says: We don't have a storage container.");
-					var testPositions = spiralPositions(spawn.pos.x, spawn.pos.y, 100);
-					var firstViablePosition = testPositions.find((el)=> canBuildAt(spawn.room, el[0], el[1]));
+					let testPositions = spiralPositions(spawn.pos.x, spawn.pos.y, 100);
+					let firstViablePosition = testPositions.find((el)=> canBuildAt(spawn.room, el[0], el[1]));
 					if(!firstViablePosition) {
 						console.log("No viable building positions.");
 					}else{
-						var createSiteAttempt = spawn.room.createConstructionSite(firstViablePosition[0], firstViablePosition[1], STRUCTURE_STORAGE);
+						let createSiteAttempt = spawn.room.createConstructionSite(firstViablePosition[0], firstViablePosition[1], STRUCTURE_STORAGE);
 						switch (createSiteAttempt){
 							case ERR_RCL_NOT_ENOUGH:
 								break;
 							default:
 								console.log("Creating storage site at: "+firstViablePosition[0]+", "+firstViablePosition[1]);
+						}
+					}
+				}
+
+				if(spawn.room.energyCapacityAvailable == spawn.room.energyAvailable && !spawn.pos.findClosestByRange(FIND_CONSTRUCTION_SITES)){
+					//We can get a storage container, but we don't have one yet
+					console.log(spawn.name+" says: Room storage is full.");
+					let testPositions = spiralPositions(spawn.pos.x, spawn.pos.y, 100);
+					let firstViablePosition = testPositions.find((el)=> canBuildAt(spawn.room, el[0], el[1]));
+					if(!firstViablePosition) {
+						console.log("No viable building positions.");
+					}else{
+						let createSiteAttempt = spawn.room.createConstructionSite(firstViablePosition[0], firstViablePosition[1], STRUCTURE_CONTAINER);
+						switch (createSiteAttempt){
+							case ERR_RCL_NOT_ENOUGH:
+								break;
+							default:
+								console.log("Creating container at: "+firstViablePosition[0]+", "+firstViablePosition[1]);
 						}
 					}
 				}

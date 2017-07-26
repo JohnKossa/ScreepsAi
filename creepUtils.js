@@ -9,8 +9,8 @@ function creepMatchesProfile(creep, profile){
 function creepsAvailableForProfile(creepArray, profile){
 	return creepArray.filter((creep) => creepMatchesProfile(creep, profile));
 }
-function creepsInProfile(creepArray, profileName){
-	return creepArray.filter((creep) => creep.memory.profile.name == profileName);
+function creepsInProfile(creepArray, profile){
+	return creepArray.filter((creep) => creep.memory.profile == profile.name);
 }
 module.exports.creepMatchesProfile = creepMatchesProfile;
 module.exports.creepsAvailableForProfile = creepsAvailableForProfile;
