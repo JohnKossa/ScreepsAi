@@ -1,5 +1,5 @@
-var my = require("./my");
-var profiles = require("./profiles");
+let my = require("./my");
+let profiles = require("./profiles");
 
 module.exports.loop = function(){
 	my.spawns().forEach((spawn)=>{

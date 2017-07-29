@@ -58,7 +58,7 @@ Game = {
      * @see {@link http://support.screeps.com/hc/en-us/articles/203016382-Game#creeps}
      * @type {Array<string, Creep>}
      * @example
-     * for(var i in Game.creeps) {
+     * for(let i in Game.creeps) {
      *     Game.creeps[i].moveTo(flag);
      * }
      */
@@ -126,7 +126,7 @@ Game = {
          * @type {function}
          * @see {@link http://support.screeps.com/hc/en-us/articles/203079191-Map#describeExits}
          * @example
-         * var exits = Game.map.describeExits('W8N3');
+         * let exits = Game.map.describeExits('W8N3');
          */
         describeExits: function (roomName) {
         },

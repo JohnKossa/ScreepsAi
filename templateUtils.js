@@ -1,7 +1,7 @@
 function templateMatchesProfile(template, profile){
-	var matches = true;
+	let matches = true;
 	profile.requiredSkills.forEach((skill) => {
-		var relevantTemplate = template.filter((el) => el.type == skill.type);
+		let relevantTemplate = template.filter((el) => el.type == skill.type);
 		if(!relevantTemplate.length){
 			matches = false; //template is missing that skill
 		}
@@ -12,9 +12,9 @@ function templateMatchesProfile(template, profile){
 	return matches;
 }
 function templateToBodyArray(templateArr){
-	var output = [];
+	let output = [];
 	templateArr.forEach((templatePart) => {
-		var fillType;
+		let fillType;
 		switch(templatePart.type){
 			case "work":
 				fillType = WORK;
@@ -31,14 +31,14 @@ function templateToBodyArray(templateArr){
 			default:
 				console.log("Unrecognized fill type in body creation");
 		}
-		for(var i = 0; i < templatePart.amt; i++){
+		for(let i = 0; i < templatePart.amt; i++){
 			output.push(fillType); //Have to do this instead of the fill trick because of dumb enum reasons
 		}
 	});
 	return output;
 }
 function templateToCost(templateArr){
-	var cost = 0;
+	let cost = 0;
 	templateArr.forEach((templatePart)=>{
 		switch (templatePart.type){
 			case TOUGH:

@@ -1,11 +1,11 @@
-var my = require("./my");
-var jobs = require("./jobs");
-var creepsAvailableForProfile = require("./creepUtils").creepsAvailableForProfile;
-var creepMatchesProfile = require("./creepUtils").creepMatchesProfile;
-var creepsInProfile = require("./creepUtils").creepsInProfile;
-var spiralPositions = require("./positionLogic").spiralPositions;
-var canBuildAt = require("./positionLogic").canBuildAt;
-var profiles = {
+let my = require("./my");
+let jobs = require("./jobs");
+let creepsAvailableForProfile = require("./creepUtils").creepsAvailableForProfile;
+let creepMatchesProfile = require("./creepUtils").creepMatchesProfile;
+let creepsInProfile = require("./creepUtils").creepsInProfile;
+let spiralPositions = require("./positionLogic").spiralPositions;
+let canBuildAt = require("./positionLogic").canBuildAt;
+let profiles = {
 	creeps: {
 		miner:{
 			name: "miner",
@@ -67,22 +67,22 @@ var profiles = {
 			name: "default",
 			priorities: [{type: "EnergyMin", amount: .1}, {type: "EnergyMax", amount: 1}],
 			behavior: function(spawn){
-				var findHostile = spawn.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+				let findHostile = spawn.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
 				if(findHostile){
 					//There's an invader. Activate all defenders
-					var possibleDefenders = creepsAvailableForProfile(my.creeps(), profiles.creeps.defender);
+					let possibleDefenders = creepsAvailableForProfile(my.creeps(), profiles.creeps.defender);
 					possibleDefenders.forEach((creep)=>{creep.memory.profile = "defender"});
 				}
 
-				var constructionTarget = spawn.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+				let constructionTarget = spawn.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 				if(constructionTarget) {
 					let allBuilders = creepsInProfile(my.creeps(), profiles.creeps.builder);
 					let allMiners = creepsInProfile(my.creeps(), profiles.creeps.miner);
-					var haveBuilder = allBuilders.length > 0;
+					let haveBuilder = allBuilders.length > 0;
 					if(!haveBuilder && allMiners.length > 1){
 						//Unbuilt buildings but no builders, convert a worker to a builder
 						console.log(spawn.name+" says: I need to convert a builder.");
-						var viableBuilders = creepsAvailableForProfile(my.creeps(), profiles.creeps.builder);
+						let viableBuilders = creepsAvailableForProfile(my.creeps(), profiles.creeps.builder);
 						if(viableBuilders.length){
 							console.log(spawn.name+" says: I converted a builder");
 							viableBuilders[0].memory.profile = "builder";
@@ -130,14 +130,14 @@ var profiles = {
 				if(spawn.spawning){
 					return; //structure is busy
 				}
-				var potentialWorkers = creepsAvailableForProfile(my.creeps(), profiles.creeps.miner);
+				let potentialWorkers = creepsAvailableForProfile(my.creeps(), profiles.creeps.miner);
 				if(potentialWorkers.length < 6){
 					console.log("I have "+potentialWorkers.length+" workers. Making more.");
 					if(jobs.spawns.spawnCreep(spawn, "worker", 0, profiles.creeps.miner)){
 						return; //this is all we can do this cycle
 					}
 				}
-				var potentialDefenders = creepsAvailableForProfile(my.creeps(), profiles.creeps.defender);
+				let potentialDefenders = creepsAvailableForProfile(my.creeps(), profiles.creeps.defender);
 				if(potentialDefenders.length < 8){
 					console.log("I have "+ potentialDefenders.length + " defenders. Making more.");
 					if(jobs.spawns.spawnCreep(spawn, "militia", 0, profiles.creeps.defender)){
@@ -146,7 +146,7 @@ var profiles = {
 				}
 				/*if(currentWorkerCount > 5){
 				 //recycle workers
-				 var nearbyCreeps = my.creeps().sort(function(creep){return spawn.pos.findInRange(FIND_MY_CREEPS, 1)})
+				 let nearbyCreeps = my.creeps().sort(function(creep){return spawn.pos.findInRange(FIND_MY_CREEPS, 1)})
 				 spawn.recycleCreep(nearbyCreeps.pop());
 				 }*/
 			}

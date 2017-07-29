@@ -1,18 +1,18 @@
-var my = require("./my");
-var templates = require("./templates");
-var templateMatchesProfile = require("./templateUtils").templateMatchesProfile;
-var templateToBodyArray = require("./templateUtils").templateToBodyArray;
+let my = require("./my");
+let templates = require("./templates");
+let templateMatchesProfile = require("./templateUtils").templateMatchesProfile;
+let templateToBodyArray = require("./templateUtils").templateToBodyArray;
 
-var jobs = {
+let jobs = {
 	spawns:{
 		spawnCreep: function(spawn, templateType, templatelevel, profile){
 			spawn.memory.job = "spawnCreep";
-			var templateArr = templates[templateType][templatelevel];
+			let templateArr = templates[templateType][templatelevel];
 			if(!templateMatchesProfile(templateArr, profile)){
 				console.log("This template cannot support the requested profile.");
 				return false;
 			}
-			var tryMakeCreep = spawn.createCreep(templateToBodyArray(templateArr));
+			let tryMakeCreep = spawn.createCreep(templateToBodyArray(templateArr));
 			switch (tryMakeCreep){
 				case ERR_BUSY:
 				case ERR_NAME_EXISTS:
@@ -38,8 +38,8 @@ var jobs = {
 		mineUntilFull: function (creep) {
 			creep.memory.job = "mineUntilFull";
 			if(creep.carry.energy < creep.carryCapacity){
-				var source = creep.pos.findClosestByPath(FIND_SOURCES);
-				if(creep.harvest(source) == ERR_NOT_IN_RANGE){
+				let source = creep.pos.findClosestByPath(FIND_SOURCES);
+				if(creep.harvest(source) === ERR_NOT_IN_RANGE){
 					creep.moveTo(source);
 				}
 			}else{
@@ -50,10 +50,10 @@ var jobs = {
 		dropOffResources: function(creep){
 			creep.memory.job = "dropOffResources";
 			//TODO: If the spawn is full and there are unfilled storage containers, use one of those instead
-			var nonEmptySpawns = my.spawns().filter((spawn)=> spawn.energy < spawn.energyCapacity);
+			let nonEmptySpawns = my.spawns().filter((spawn)=> spawn.energy < spawn.energyCapacity);
 			if(nonEmptySpawns.length > 0){
-				var closestNonEmptySpawns = nonEmptySpawns.sort((first, second) => creep.pos.getRangeTo(first) - creep.pos.getRangeTo(second));
-				var target = closestNonEmptySpawns[0];
+				let closestNonEmptySpawns = nonEmptySpawns.sort((first, second) => creep.pos.getRangeTo(first) - creep.pos.getRangeTo(second));
+				let target = closestNonEmptySpawns[0];
 				let transferAttempt = creep.transfer(target, RESOURCE_ENERGY);
 				switch(transferAttempt){
 					case ERR_NOT_IN_RANGE:
@@ -76,8 +76,8 @@ var jobs = {
 				}
 			}else{
 				console.log("Check for non-empty structures");
-				var nonEmptyStorage = creep.room.find(FIND_MY_STRUCTURES);
-				nonEmptyStorage = nonEmptyStorage.filter((structure) => structure.structureType == STRUCTURE_STORAGE && structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
+				let nonEmptyStorage = creep.room.find(FIND_MY_STRUCTURES);
+				nonEmptyStorage = nonEmptyStorage.filter((structure) => structure.structureType === STRUCTURE_STORAGE && structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
 				nonEmptyStorage = nonEmptyStorage.sort((first, second) => creep.pos.getRangeTo(first) - creep.pos.getRangeTo(second));
 				if(nonEmptyStorage.length > 0){
 					let target = nonEmptyStorage[0];
@@ -98,8 +98,8 @@ var jobs = {
 							}
 					}
 				}else{
-					var nonEmptyContainer = creep.room.find(FIND_STRUCTURES);
-					nonEmptyContainer = nonEmptyContainer.filter((structure) => structure.structureType == STRUCTURE_CONTAINER);
+					let nonEmptyContainer = creep.room.find(FIND_STRUCTURES);
+					nonEmptyContainer = nonEmptyContainer.filter((structure) => structure.structureType === STRUCTURE_CONTAINER);
 					nonEmptyContainer = nonEmptyContainer.filter((structure) => structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
 					nonEmptyContainer = nonEmptyContainer.sort((first, second) => creep.pos.getRangeTo(first) - creep.pos.getRangeTo(second));
 					if(nonEmptyContainer.length > 0){
@@ -125,7 +125,7 @@ var jobs = {
 				console.log(creep.name+" finished task: dropOffResources");
 				creep.memory.job = "dropOffResources:done"; //no valid targets, job is done
 			}
-			if(creep.carry.energy == 0){
+			if(creep.carry.energy === 0){
 				console.log(creep.name+" finished task: dropOffResources");
 				creep.memory.job = "dropOffResources:done";
 			}
@@ -135,10 +135,10 @@ var jobs = {
 			//if any, lock on and attack
 			//if none, job is finished
 			creep.memory.job = "autoAttack";
-			var target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+			let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
 			if(target){
 				//move to and attack
-				var attackAttempt = creep.attack(target);
+				let attackAttempt = creep.attack(target);
 				switch (attackAttempt){
 					case ERR_NOT_IN_RANGE:
 						creep.moveTo(target);
@@ -158,7 +158,7 @@ var jobs = {
 			console.log("building things");
 			const target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
 			if(target) {
-				if(creep.build(target) == ERR_NOT_IN_RANGE) {
+				if(creep.build(target) === ERR_NOT_IN_RANGE) {
 					creep.moveTo(target);
 				}
 			}else{

@@ -1,5 +1,5 @@
 function makeTemplate(pattern, level){
-	var returnValue = [];
+	let returnValue = [];
 	for(let i = 0; i < pattern.length; i++){
 		returnValue.push({amt: 1, type: pattern[i]});
 	}
@@ -10,8 +10,8 @@ function makeTemplate(pattern, level){
 }
 
 function makeTemplates(pattern, count){
-	var retVal = [];
-	for(var i = 0; i<count; i++){
+	let retVal = [];
+	for(let i = 0; i<count; i++){
 		retVal.push(makeTemplate(pattern, i));
 	}
 	return retVal;

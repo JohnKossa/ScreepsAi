@@ -1,5 +1,5 @@
-var objToArray = require("./utils").objToArray;
-var my = {
+let objToArray = require("./utils").objToArray;
+let my = {
 	creeps: function () {
 		return objToArray(Game.creeps);
 	},
