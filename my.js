@@ -8,6 +8,12 @@ let my = {
 	},
 	structures: function(){
 		return objToArray(Game.structures);
+	},
+	constructionSites: function(){
+		return objToArray(Game.constructionSites);
+	},
+	rooms: function(){
+		return objToArray(Game.rooms);
 	}
 };
 module.exports = my;
